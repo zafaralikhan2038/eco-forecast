@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Dashboard Overview</h1>
+        <div class="flex items-center space-x-4">
+            <span class="text-sm text-gray-600">Last Updated: {{ recent_weather.first.timestamp|date:"M d, H:i" }}</span>
+            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs">Real-time Data</span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+            <div class="bg-gray-50 px-6 py-4 border-b">
+                <h2 class="text-xl font-semibold text-gray-700 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                    </svg>
+                    Weather Insights
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-4 p-10 px-12">
+                <div class="relative md:col-span-2 style="height: 300px;"">
+                    <h3 class="text-md font-medium text-gray-600 mb-4">Temperature Trend</h3>
+                    <canvas id="temperatureChart" class="absolute inset-0 w-full h-full mt-5"></canvas>
+                </div>
+                <div class="space-y-4 md:col-span-1">
+                    <h3 class="text-md font-medium text-gray-600 mb-3">Recent Measurements</h3>
+                    <div class="space-y-2">
+                        <div class="bg-gray-100 rounded-lg p-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Avg Temperature</span>
+                                <span class="font-bold text-blue-600">{{ weather_insights.avg_temperature|floatformat:1 }}°C</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 rounded-lg p-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Max Temperature</span>
+                                <span class="font-bold text-red-600">{{ weather_insights.max_temperature|floatformat:1 }}°C</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 rounded-lg p-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Min Temperature</span>
+                                <span class="font-bold text-green-600">{{ weather_insights.min_temperature|floatformat:1 }}°C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+            <div class="bg-gray-50 px-6 py-4 border-b">
+                <h2 class="text-xl font-semibold text-gray-700 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                    Energy Forecast
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-4 p-6">
+                <div class="relative md:col-span-2" style="height: 300px;">
+                    <h3 class="text-md font-medium text-gray-600 mb-4">Renewable Output</h3>
+                    <canvas id="energyForecastChart" class="absolute inset-0 w-full h-full mt-8"></canvas>
+                </div>
+                <div class="md:col-span-1">
+                    <h3 class="text-md font-medium text-gray-600 mb-3">Energy Summary</h3>
+                    <div class="space-y-2">
+                        <div class="bg-gray-100 rounded-lg p-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Total Solar Output</span>
+                                <span class="font-bold text-yellow-600">{{ energy_insights.total_solar_output|floatformat:1 }} kWh</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 rounded-lg p-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Total Wind Output</span>
+                                <span class="font-bold text-blue-600">{{ energy_insights.total_wind_output|floatformat:1 }} kWh</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8">
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-8">
+            <div class="bg-gray-50 px-6 py-4 border-b">
+                <h2 class="text-xl font-semibold text-gray-700 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 11h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2z"></path>
+                    </svg>
+                    Weather Data Log
+                </h2>
+            </div>
+            <div class="p-6 overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Location</th>
+                            <th scope="col" class="px-6 py-3">Temperature (°C)</th>
+                            <th scope="col" class="px-6 py-3">Humidity (%)</th>
+                            <th scope="col" class="px-6 py-3">Wind Speed (km/h)</th>
+                            <th scope="col" class="px-6 py-3">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for weather in recent_weather %}
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4">{{ weather.location }}</td>
+                            <td class="px-6 py-4 font-medium text-blue-600">{{ weather.temperature|floatformat:1 }}</td>
+                            <td class="px-6 py-4">{{ weather.humidity|floatformat:1 }}</td>
+                            <td class="px-6 py-4">{{ weather.wind_speed|floatformat:1 }}</td>
+                            <td class="px-6 py-4">{{ weather.timestamp|date:"M d, Y H:i" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+            <div class="bg-gray-50 px-6 py-4 border-b">
+                <h2 class="text-xl font-semibold text-gray-700 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Energy Forecast Details
+                </h2>
+            </div>
+            <div class="p-6 overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Location</th>
+                            <th scope="col" class="px-6 py-3">Predicted Solar Output (kWh)</th>
+                            <th scope="col" class="px-6 py-3">Predicted Wind Output (kWh)</th>
+                            <th scope="col" class="px-6 py-3">Total Predicted Output (kWh)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for forecast in recent_forecasts %}
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium">{{ forecast.location }}</td>
+                            <td class="px-6 py-4 text-yellow-600">{{ forecast.predicted_solar_output|floatformat:1 }}</td>
+                            <td class="px-6 py-4 text-blue-600">{{ forecast.predicted_wind_output|floatformat:1 }}</td>
+                            <td class="px-6 py-4 font-bold text-green-600">
+                                {{ forecast.predicted_solar_output|add:forecast.predicted_wind_output|floatformat:1 }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Temperature Chart
+        const temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
+        new Chart(temperatureCtx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for weather in recent_weather %}
+                        "{{ weather.timestamp|date:'H:i' }}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: [
+                        {% for weather in recent_weather %}
+                            {{ weather.temperature }},
+                        {% endfor %}
+                    ],
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'linear-gradient(to bottom, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.1))',
+                    borderWidth: 2,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgb(59, 130, 246)',
+                    pointHoverRadius: 8,
+                    pointHoverBackgroundColor: 'rgb(37, 99, 235)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                layout: {
+                    padding: {
+                        top: 20,
+                        bottom: 20,
+                        left: 20,
+                        right: 20
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)',
+                            borderDash: [5, 5]
+                        },
+                        title: {
+                            display: true,
+                            text: 'Temperature (°C)',
+                            color: 'rgb(107, 114, 128)',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgb(17, 24, 39)',
+                        titleColor: 'white',
+                        bodyColor: 'white'
+                    }
+                }
+            }
+        });
+    
+        // Energy Forecast Chart
+        const energyCtx = document.getElementById('energyForecastChart').getContext('2d');
+        new Chart(energyCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for forecast in recent_forecasts %}
+                        "{{ forecast.location }}",
+                    {% endfor %}
+                ],
+                datasets: [
+                    {
+                        label: 'Solar Output (kWh)',
+                        data: [
+                            {% for forecast in recent_forecasts %}
+                                {{ forecast.predicted_solar_output }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(255, 206, 86, 0.7)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5
+                    },
+                    {
+                        label: 'Wind Output (kWh)',
+                        data: [
+                            {% for forecast in recent_forecasts %}
+                                {{ forecast.predicted_wind_output }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                layout: {
+                    padding: {
+                        top: 20,
+                        bottom: 20,
+                        left: 20,
+                        right: 20
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)',
+                            borderDash: [5, 5]
+                        },
+                        title: {
+                            display: true,
+                            text: 'Energy Output (kWh)',
+                            color: 'rgb(107, 114, 128)',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgb(17, 24, 39)',
+                        titleColor: 'white',
+                        bodyColor: 'white'
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}EcoForecast - Renewable Energy Prediction{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Custom Styles -->
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f0f4f8;
+        color: #2d3748;
+        padding-top: 96px;
+      }
+      :root {
+        --primary-teal: #008080;
+        --secondary-gold: #e2c044;
+        --soft-green: #a7c957;
+      }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="flex flex-col min-h-screen">
+    {% include 'partials/header.html' %}
+
+    <main class="flex-grow container mx-auto mt-8 px-4 py-6 relative z-0">
+      {% block content %}{% endblock %}
+    </main>
+
+    {% include 'partials/footer.html' %}
+
+    <script src="{% static 'js/dropdown.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+  </body>
+</html>

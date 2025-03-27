@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="h-[80vh] flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 mb-8">
+    <div class="max-w-3xl w-full bg-white shadow-2xl rounded-2xl border border-gray-100 overflow-hidden">
+        <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-6 mb-4">
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-white flex items-center justify-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <span>Edit Profile</span>
+            </h2>
+        </div>
+        
+        <form method="post" class="mt-8 space-y-6 px-8 pb-8">
+            {% csrf_token %}
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    {# Username & Email in the same row #}
+                    <div>
+                        <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            {{ form.username.label }}
+                            {% if form.username.field.required %}
+                                <span class="text-red-500 ml-1">*</span>
+                            {% endif %}
+                        </label>
+                        <div class="relative">
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if form.username.errors %}
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            {% for error in form.username.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            {{ form.email.label }}
+                            {% if form.email.field.required %}
+                                <span class="text-red-500 ml-1">*</span>
+                            {% endif %}
+                        </label>
+                        <div class="relative">
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if form.email.errors %}
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            {% for error in form.email.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            {{ form.first_name.label }}
+                            {% if form.first_name.field.required %}
+                                <span class="text-red-500 ml-1">*</span>
+                            {% endif %}
+                        </label>
+                        <div class="relative">
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if form.first_name.errors %}
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            {% for error in form.first_name.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            {{ form.last_name.label }}
+                            {% if form.last_name.field.required %}
+                                <span class="text-red-500 ml-1">*</span>
+                            {% endif %}
+                        </label>
+                        <div class="relative">
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if form.last_name.errors %}
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            {% for error in form.last_name.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex space-x-4">
+                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300 transform hover:-translate-y-1 hover:scale-102">
+                    <span class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Update Profile
+                    </span>
+                </button>
+            </div>
+        </form>
+        
+        <div class="bg-gray-50 p-4 text-center border-t">
+            <a href="{% url 'auth:profile' %}" class="text-sm text-gray-600 hover:text-gray-900 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Profile
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

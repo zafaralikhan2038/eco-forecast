@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-2xl border border-gray-100 mb-12">
+    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Create Your Account</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded mb-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="space-y-5">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="id_username" class="block mb-2 text-sm font-medium text-gray-700">Username</label>
+                <input type="text" name="username" id="id_username" required 
+                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 transition duration-300 
+                       {% if form.username.errors %}border-red-500 focus:border-red-500{% else %}border-gray-300{% endif %}">
+                {% if form.username.errors %}
+                    <p class="text-red-500 text-sm mt-1">
+                        {% for error in form.username.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="id_email" class="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                <input type="email" name="email" id="id_email" 
+                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 transition duration-300
+                       {% if form.email.errors %}border-red-500 focus:border-red-500{% else %}border-gray-300{% endif %}">
+                {% if form.email.errors %}
+                    <p class="text-red-500 text-sm mt-1">
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="id_first_name" class="block mb-2 text-sm font-medium text-gray-700">First Name</label>
+                <input type="text" name="first_name" id="id_first_name" required 
+                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 transition duration-300
+                       {% if form.first_name.errors %}border-red-500 focus:border-red-500{% else %}border-gray-300{% endif %}">
+                {% if form.first_name.errors %}
+                    <p class="text-red-500 text-sm mt-1">
+                        {% for error in form.first_name.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="id_last_name" class="block mb-2 text-sm font-medium text-gray-700">Last Name</label>
+                <input type="text" name="last_name" id="id_last_name" required 
+                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 transition duration-300
+                       {% if form.last_name.errors %}border-red-500 focus:border-red-500{% else %}border-gray-300{% endif %}">
+                {% if form.last_name.errors %}
+                    <p class="text-red-500 text-sm mt-1">
+                        {% for error in form.last_name.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <label for="id_profile_photo" class="block mb-2 text-sm font-medium text-gray-700">Profile Photo (Optional)</label>
+            <input type="file" name="profile_photo" id="id_profile_photo"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 transition duration-300
+                   {% if form.profile_photo.errors %}border-red-500 focus:border-red-500{% else %}border-gray-300{% endif %}">
+            {% if form.profile_photo.errors %}
+                <p class="text-red-500 text-sm mt-1">
+                    {% for error in form.profile_photo.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="id_password1" class="block mb-2 text-sm font-medium text-gray-700">Password</label>
+                <input type="password" name="password1" id="id_password1" required 
+                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 transition duration-300
+                       {% if form.password1.errors %}border-red-500 focus:border-red-500{% else %}border-gray-300{% endif %}">
+                {% if form.password1.errors %}
+                    <p class="text-red-500 text-sm mt-1">
+                        {% for error in form.password1.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="id_password2" class="block mb-2 text-sm font-medium text-gray-700">Confirm Password</label>
+                <input type="password" name="password2" id="id_password2" required 
+                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 transition duration-300
+                       {% if form.password2.errors %}border-red-500 focus:border-red-500{% else %}border-gray-300{% endif %}">
+                {% if form.password2.errors %}
+                    <p class="text-red-500 text-sm mt-1">
+                        {% for error in form.password2.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <button type="submit" class="w-full bg-green-600 text-white p-3 rounded-md hover:bg-green-700 
+                                     transition duration-300 ease-in-out transform hover:-translate-y-1 
+                                     focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+            Create Account
+        </button>
+    </form>
+
+    <div class="mt-6 text-center">
+        <p class="text-gray-600">Already have an account? 
+            <a href="{% url 'auth:login' %}" class="text-green-600 font-semibold hover:text-green-800 transition duration-300">
+                Log in
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}
