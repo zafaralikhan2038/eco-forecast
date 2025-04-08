@@ -9,8 +9,8 @@ COPY requirements.txt /app/
 RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy project files
 COPY . /app/
-# Create migrations for the accounts app and then run all migrations
-RUN python manage.py makemigrations accounts && python manage.py migrate
+# Create all necessary migrations and then run migrations
+RUN python manage.py makemigrations accounts weather energy_forecast dashboard && python manage.py migrate
 # Collect static files
 RUN python manage.py collectstatic --noinput
 # Expose the port
