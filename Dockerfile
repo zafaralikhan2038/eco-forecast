@@ -1,6 +1,4 @@
-# Dockerfile
-
-FROM python:3.12.8-slim
+FROM python:3.12-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -15,6 +13,9 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy project files
 COPY . /app/
+
+# Run migrations
+RUN python manage.py migrate
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
