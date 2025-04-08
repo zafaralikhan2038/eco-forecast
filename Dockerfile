@@ -13,6 +13,8 @@ COPY . /app/
 RUN python manage.py makemigrations accounts weather energy_forecast dashboard && python manage.py migrate
 # Collect static files
 RUN python manage.py collectstatic --noinput
+# Set permissions for static files
+RUN chmod -R 755 /app/staticfiles
 # Expose the port
 EXPOSE 8000
 # Run the server
