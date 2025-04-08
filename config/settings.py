@@ -98,15 +98,18 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Login settings
 LOGIN_REDIRECT_URL = 'dashboard:index'
-LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'accounts:login'  # Changed from 'login' to 'accounts:login'
+LOGOUT_REDIRECT_URL = 'accounts:login'  # Updated to match LOGIN_URL namespace
 
 # Media files settings
 MEDIA_URL = '/media/'
